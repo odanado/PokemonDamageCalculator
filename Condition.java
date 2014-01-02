@@ -45,6 +45,9 @@ public class Condition {
 
     /** ダブルバトルのリフレクターか */
     protected boolean isDoubleReflect = false;
+    
+    /** フレンドガードか */
+    protected boolean isFriendGuard = false;
 
     
     /**
@@ -61,7 +64,9 @@ public class Condition {
      * @param isReflect リフレクターか
      * @param isDoubleReflect リフレクター(ダブル)か
      */
-    public Condition(boolean isPlusWeather, boolean isMinusWeather, boolean isWaterSport, boolean isBurn, boolean isBenefitSandstorm, boolean isHelpingHand, boolean isDoubleDamage, boolean isAttackBonus, boolean isHPMax, boolean isReflect, boolean isDoubleReflect) {
+    public Condition(boolean isPlusWeather, boolean isMinusWeather, boolean isWaterSport, boolean isBurn, 
+            boolean isBenefitSandstorm, boolean isHelpingHand, boolean isDoubleDamage, boolean isAttackBonus, 
+            boolean isHPMax, boolean isReflect, boolean isDoubleReflect, boolean inFriendGuard) {
         super();
         this.isPlusWeather = isPlusWeather;
         this.isMinusWeather = isMinusWeather;
@@ -74,10 +79,11 @@ public class Condition {
         this.isHPMax = isHPMax;
         this.isReflect = isReflect;
         this.isDoubleReflect = isDoubleReflect;
+        this.isFriendGuard = inFriendGuard;
     }
     
     public Condition() {
-        this(false, false, false, false, false, false, false, false, false, false, false);
+        this(false, false, false, false, false, false, false, false, false, false, false,false);
     }
 
 }

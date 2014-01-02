@@ -17,6 +17,9 @@ package com.odanado.pokemon.calculator.damege;
  */
 public enum Items {
 
+    /** 手ぶら... */
+    NONE,
+    
     /** ジュエル系 <br> 威力に1.5倍(切捨) */
     JEWELS,
     
@@ -52,5 +55,8 @@ public enum Items {
     
     /** 半減の実 <br> ダメージに0.5倍(切捨)*/
     BERRIES,
+    
+    /** オボンのみ <br> 回復 */
+    SITRUS_BERRY,
     
 }
