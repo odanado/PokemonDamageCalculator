@@ -25,11 +25,12 @@ public class Main {
                 141, 0, 116, 0,183, 120, 50, 0, 1.5, Abilities.NONE, Items.SITRUS_BERRY, 
                 new Condition(false, false, false, false, false, false, false, false, false, false, false, false));
 
-        additionalDamageCalculator.addSubstitute();
-        additionalDamageCalculator.addCalculate();
-        additionalDamageCalculator.addCalculate();
-        additionalDamageCalculator.addCalculate();
+
+        //additionalDamageCalculator.addSubstitute();
         long stop = System.currentTimeMillis();
+        additionalDamageCalculator.addCalculate();
+        //additionalDamageCalculator.addCalculate();
+        //additionalDamageCalculator.addCalculate();
 
         for (int i = 0; i < 2048; i++) {
             for (int j = 0; j <= 183 / 4; j++) {

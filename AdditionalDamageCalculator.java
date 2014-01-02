@@ -25,6 +25,7 @@ public class AdditionalDamageCalculator extends DamageCalculator {
     public AdditionalDamageCalculator(int baseAttackValue, int attackRank, int baseDefenseValue, int defenseRank, int MAX_HP, int basePowerValue, int baseLevelValue, int criticalRand, double typeCompatibility, Abilities abilities, Items items, Condition condition) {
         super(baseAttackValue, attackRank, baseDefenseValue, defenseRank, basePowerValue, baseLevelValue, criticalRand, typeCompatibility, abilities, items, condition);
 
+
         this.MAX_HP = MAX_HP;
 
         isFirstCalculate = true;
@@ -33,7 +34,6 @@ public class AdditionalDamageCalculator extends DamageCalculator {
     }
 
     public void addCalculate() {
-
         makePowerValue();
         makeAttackValue();
         makeDefenseValue();
@@ -42,11 +42,11 @@ public class AdditionalDamageCalculator extends DamageCalculator {
         calculateDamage();
         
 
-        double[][][] oldDamageProbabilityList = new double[MAX_DAMAGE][MAX_DAMAGE / 4 + 1][2];
 
         copyArray(oldDamageProbabilityList, damageProbabilityList);
         initArray(damageProbabilityList);
 
+        long start = System.currentTimeMillis();
         if (isFirstCalculate) {
             isFirstCalculate = false;
             for (int i = 0; i < 16; i++) {
@@ -98,6 +98,9 @@ public class AdditionalDamageCalculator extends DamageCalculator {
         }
 
         useSitrusBerry();
+
+        long stop = System.currentTimeMillis();
+        System.out.println("実行にかかった時間は " + (stop - start) + " ミリ秒です。");
 
     }
 
@@ -160,6 +163,7 @@ public class AdditionalDamageCalculator extends DamageCalculator {
 
     /** [ダメージ][身代わりのHP][オボンを使用した] */
     public double[][][] damageProbabilityList    = new double[MAX_DAMAGE][MAX_DAMAGE / 4 + 1][2];
+    private double[][][] oldDamageProbabilityList = new double[MAX_DAMAGE][MAX_DAMAGE / 4 + 1][2];
 
     private boolean isFirstCalculate;
 
