@@ -40,16 +40,23 @@ public class AdditionalDamageCalculator extends DamageCalculator {
     }
 
     public void addCalculate(AdditionalMode additionalMode) {
+        initArray(resultDamageProbabilityList0);
+        initArray(resultDamageProbabilityList1);
+        
         switch (additionalMode) {
         case ATTACK:
+            saveDamageProbabilityList();
             _addCalculate();
             addresultDamageProbabilityList(1.0);
             break;
         case ATTACK_TWO_TIMES:
+            saveDamageProbabilityList();
             break;
         case ATTACK_FIVE_TIMES:
+            saveDamageProbabilityList();
             break;
         case ATTACK_TWO_TO_FIVE_TIMES:
+            saveDamageProbabilityList();
             _addCalculate();
             _addCalculate();
             addresultDamageProbabilityList(3.0/8.0);
@@ -62,11 +69,19 @@ public class AdditionalDamageCalculator extends DamageCalculator {
             
             _addCalculate();
             addresultDamageProbabilityList(1.0/8.0);
+            break;
+        case SUBSTITUTE:
+            saveDamageProbabilityList();
+            addSubstitute();
+            addresultDamageProbabilityList(1.0);
+            break;
+        case PREVIOUS:
+            prevDamageProbabilityList();
+            addresultDamageProbabilityList(1.0);
             break;
         default:
             break;
         }
-        //saveDamageProbabilityList();
     }
     
     private void _addCalculate() {
@@ -170,9 +185,22 @@ public class AdditionalDamageCalculator extends DamageCalculator {
     
     public void prevDamageProbabilityList() {
         /* next は何を計算したか保存しておいて再計算 */
+        
         copyArray(prevDamageProbabilityList0 ,damageProbabilityList0);
         copyArray(prevDamageProbabilityList1 ,damageProbabilityList1);
         
+    }
+    
+    private void viewArray(double[][] array) {
+        for (int i = 0; i < array.length; i++) {
+            for (int j = 0; j < array[i].length; j++) {
+                if(array[i][j]!=0.0) {
+                    
+                    System.out.print(array[i][j]+" ");
+                }
+            }
+            System.out.println("");
+        }
     }
     
     /** 身代わりを設置 */

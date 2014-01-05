@@ -24,20 +24,23 @@ public class Main {
 
 
         
-        additionalDamageCalculator.addSubstitute();
         additionalDamageCalculator.addCalculate(AdditionalMode.ATTACK);
-        //additionalDamageCalculator.addSubstitute();
-        //additionalDamageCalculator.addCalculate(AdditionalMode.ATTACK);
-        //additionalDamageCalculator.prevDamageProbabilityList();
+        additionalDamageCalculator.addCalculate(AdditionalMode.ATTACK);
+        additionalDamageCalculator.addCalculate(AdditionalMode.SUBSTITUTE);
+        additionalDamageCalculator.addCalculate(AdditionalMode.ATTACK);
+        additionalDamageCalculator.addCalculate(AdditionalMode.ATTACK);
+        additionalDamageCalculator.addCalculate(AdditionalMode.PREVIOUS);
 
         long stop = System.currentTimeMillis();
         for (int i = 0; i < 2048; i++) {
             for (int j = 0; j <= 183 / 4; j++) {
                 if (additionalDamageCalculator.damageProbabilityList1[i][j] != 0.0) {
-                    System.out.println(String.format("%d\t+ (%d) %.2f" + "%%", i, j,additionalDamageCalculator.damageProbabilityList1[i][j] * 100));
+                    System.out.println(String.format("%d\t+ (%d) %.2f" + "%%", i, j,
+                            additionalDamageCalculator.damageProbabilityList1[i][j] * 100));
                 }
                 if (additionalDamageCalculator.damageProbabilityList0[i][j] != 0.0) {
-                    System.out.println(String.format("%d(盆)\t+ (%d) %.2f" + "%%", i, j,additionalDamageCalculator.damageProbabilityList0[i][j] * 100));
+                    System.out.println(String.format("%d(盆)\t+ (%d) %.2f" + "%%", i, j,
+                            additionalDamageCalculator.damageProbabilityList0[i][j] * 100));
                 }
             }
         }
