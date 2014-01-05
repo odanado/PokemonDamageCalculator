@@ -19,28 +19,25 @@ public class Main {
     public static void main(String[] args) {
         long start = System.currentTimeMillis();
         AdditionalDamageCalculator additionalDamageCalculator = new AdditionalDamageCalculator(
-                70, 0, 116, 0,183, 120, 50, 0, 1.5, Abilities.NONE, Items.SITRUS_BERRY, 
-                new Condition(false, false, false, false, false, false, false, false, false, false, false, false));
+                70, 0, 116, 0,183, 120, 50, 0, 1.0, Abilities.NONE, Items.BERRIES, 
+                new Condition(false, false, false, false, false, false, false, true, false, false, false, false));
 
 
         
         additionalDamageCalculator.addCalculate(AdditionalMode.ATTACK);
-        additionalDamageCalculator.addCalculate(AdditionalMode.ATTACK);
-        additionalDamageCalculator.addCalculate(AdditionalMode.SUBSTITUTE);
-        additionalDamageCalculator.addCalculate(AdditionalMode.ATTACK);
-        additionalDamageCalculator.addCalculate(AdditionalMode.ATTACK);
+        additionalDamageCalculator.addCalculate(AdditionalMode.ATTACK_TWO_TO_FIVE_TIMES);
         additionalDamageCalculator.addCalculate(AdditionalMode.PREVIOUS);
 
         long stop = System.currentTimeMillis();
         for (int i = 0; i < 2048; i++) {
             for (int j = 0; j <= 183 / 4; j++) {
-                if (additionalDamageCalculator.damageProbabilityList1[i][j] != 0.0) {
+                if (additionalDamageCalculator.resultDamageProbabilityList1[i][j] != 0.0) {
                     System.out.println(String.format("%d\t+ (%d) %.2f" + "%%", i, j,
-                            additionalDamageCalculator.damageProbabilityList1[i][j] * 100));
+                            additionalDamageCalculator.resultDamageProbabilityList1[i][j] * 100));
                 }
-                if (additionalDamageCalculator.damageProbabilityList0[i][j] != 0.0) {
+                if (additionalDamageCalculator.resultDamageProbabilityList0[i][j] != 0.0) {
                     System.out.println(String.format("%d(盆)\t+ (%d) %.2f" + "%%", i, j,
-                            additionalDamageCalculator.damageProbabilityList0[i][j] * 100));
+                            additionalDamageCalculator.resultDamageProbabilityList0[i][j] * 100));
                 }
             }
         }

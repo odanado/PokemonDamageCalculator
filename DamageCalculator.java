@@ -131,7 +131,7 @@ public class DamageCalculator {
         
         
         /* 半減の実 */
-        if(items == Items.BERRIES) {
+        if(items == Items.BERRIES && typeCompatibility >= 2.0) {
             for(int i=0; i<16; i++) {
                 damageWithoutCritical[i] *= 0.5;
                 damageWithCritical[i]    *= 0.5;                

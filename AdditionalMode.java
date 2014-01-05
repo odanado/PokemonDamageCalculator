@@ -8,6 +8,7 @@ package com.odanado.pokemon.calculator.damege;
  *
  */
 public enum AdditionalMode {
+    NONE,
     /** 通常攻撃 */
     ATTACK,
     /** 2回攻撃 */
