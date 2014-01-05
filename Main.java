@@ -12,9 +12,6 @@ import java.util.Arrays;
  */
 public class Main {
 
-    public static void f(Hoge hoge) {
-        hoge.hoge = 10;
-    }
 
     /**
      * @param args
@@ -22,23 +19,25 @@ public class Main {
     public static void main(String[] args) {
         long start = System.currentTimeMillis();
         AdditionalDamageCalculator additionalDamageCalculator = new AdditionalDamageCalculator(
-                141, 0, 116, 0,183, 120, 50, 0, 1.5, Abilities.NONE, Items.SITRUS_BERRY, 
+                70, 0, 116, 0,183, 120, 50, 0, 1.5, Abilities.NONE, Items.SITRUS_BERRY, 
                 new Condition(false, false, false, false, false, false, false, false, false, false, false, false));
 
 
-        //additionalDamageCalculator.addSubstitute();
-        long stop = System.currentTimeMillis();
-        additionalDamageCalculator.addCalculate();
-        //additionalDamageCalculator.addCalculate();
-        //additionalDamageCalculator.addCalculate();
+        
+        additionalDamageCalculator.addSubstitute();
+        additionalDamageCalculator.addCalculate(AdditionalMode.ATTACK);
+        additionalDamageCalculator.addSubstitute();
+        additionalDamageCalculator.addCalculate(AdditionalMode.ATTACK);
+        //additionalDamageCalculator.prevDamageProbabilityList();
 
+        long stop = System.currentTimeMillis();
         for (int i = 0; i < 2048; i++) {
             for (int j = 0; j <= 183 / 4; j++) {
-                if (additionalDamageCalculator.damageProbabilityList[i][j][0] != 0.0) {
-                    System.out.println(String.format("%d(盆)\t+ (%d) %.2f" + "%%", i, j,additionalDamageCalculator.damageProbabilityList[i][j][0] * 100));
+                if (additionalDamageCalculator.damageProbabilityList1[i][j] != 0.0) {
+                    System.out.println(String.format("%d\t+ (%d) %.2f" + "%%", i, j,additionalDamageCalculator.damageProbabilityList1[i][j] * 100));
                 }
-                if (additionalDamageCalculator.damageProbabilityList[i][j][1] != 0.0) {
-                    System.out.println(String.format("%d\t+ (%d) %.2f" + "%%", i, j,additionalDamageCalculator.damageProbabilityList[i][j][1] * 100));
+                if (additionalDamageCalculator.damageProbabilityList0[i][j] != 0.0) {
+                    System.out.println(String.format("%d(盆)\t+ (%d) %.2f" + "%%", i, j,additionalDamageCalculator.damageProbabilityList0[i][j] * 100));
                 }
             }
         }

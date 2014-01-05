@@ -48,7 +48,6 @@ public class DamageCalculator {
      */
     public DamageCalculator(int baseAttackValue, int attackRank, int baseDefenseValue, int defenseRank, int basePowerValue,int baseLevelValue, 
                             int criticalRand,double typeCompatibility, Abilities abilities, Items items, Condition condition) {
-        long start = System.currentTimeMillis();
 
         this.baseAttackValue = baseAttackValue;
         this.attackRank = attackRank;
@@ -72,8 +71,6 @@ public class DamageCalculator {
         makeLevelValue();
         makeBaseDamageValue();
         calculateDamage();
-        long stop = System.currentTimeMillis();
-        System.out.println("実行にかかった時間は " + (stop - start) + " ミリ秒です。");
         
     }
     
