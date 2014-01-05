@@ -261,9 +261,9 @@ public class AdditionalDamageCalculator extends DamageCalculator {
     private final int MAX_DAMAGE = 2048;
 
     /**オボンのみを使用していない [ダメージ][身代わりのHP] */
-    public double[][] damageProbabilityList0    = new double[MAX_DAMAGE][MAX_DAMAGE / 4 + 1];
+    private double[][] damageProbabilityList0    = new double[MAX_DAMAGE][MAX_DAMAGE / 4 + 1];
     /**オボンのみを使用した [ダメージ][身代わりのHP] */
-    public double[][] damageProbabilityList1    = new double[MAX_DAMAGE][MAX_DAMAGE / 4 + 1];
+    private double[][] damageProbabilityList1    = new double[MAX_DAMAGE][MAX_DAMAGE / 4 + 1];
 
     /** 状態保存用 */ 
     public double[][] prevDamageProbabilityList0    = new double[MAX_DAMAGE][MAX_DAMAGE / 4 + 1];
