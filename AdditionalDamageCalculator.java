@@ -95,19 +95,18 @@ public class AdditionalDamageCalculator extends DamageCalculator {
                 // 初回なので必ず身代わりのHPはMAX
                 // 初回ではオボンを使用してないので、必ずList0で計算
 
-                if (oldDamageProbabilityList0[damageWithoutCritical[i]][MAX_HP / 4] == 1.0) {
+                if (oldDamageProbabilityList0[MAX_HP / 4][MAX_HP / 4] == 1.0) {
                     // 身代わりが存在する
                     int a = damageWithoutCritical[i] < MAX_HP / 4 ? MAX_HP / 4 - damageWithoutCritical[i] : 0;
                     damageProbabilityList0[MAX_HP / 4][a] += probabilityWithoutCritical;
+                    
+                    a = damageWithCritical[i] < MAX_HP / 4 ? MAX_HP / 4 - damageWithCritical[i] : 0;
+                    damageProbabilityList0[MAX_HP / 4][a] += probabilityWithCritical;
+                    
                 } else {
                     // 身代わりが存在しない
                     damageProbabilityList0[damageWithoutCritical[i]][0] += probabilityWithoutCritical;
-                }
-                if (oldDamageProbabilityList0[damageWithCritical[i]][MAX_HP / 4] == 1.0) {
-                    int a = damageWithCritical[i] < MAX_HP / 4 ? MAX_HP / 4 - damageWithCritical[i] : 0;
-                    damageProbabilityList0[MAX_HP / 4][a] += probabilityWithCritical;
-                } else {
-                    damageProbabilityList0[damageWithCritical[i]][0] += probabilityWithCritical;
+                    damageProbabilityList0[damageWithCritical[i]][0]    += probabilityWithCritical;
                 }
             }
         } else {
@@ -180,7 +179,7 @@ public class AdditionalDamageCalculator extends DamageCalculator {
     public void addSubstitute() {
         if (isFirstCalculate) {
             for (int i = 0; i < MAX_DAMAGE; i++) {
-                damageProbabilityList0[i][MAX_HP / 4] = 1.0;
+                damageProbabilityList0[MAX_HP / 4][MAX_HP / 4] = 1.0;
             }
         } else {
             for (int i = 0; i < 3 * MAX_HP / 4 + 1; i++) {

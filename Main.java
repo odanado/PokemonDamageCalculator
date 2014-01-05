@@ -26,8 +26,8 @@ public class Main {
         
         additionalDamageCalculator.addSubstitute();
         additionalDamageCalculator.addCalculate(AdditionalMode.ATTACK);
-        additionalDamageCalculator.addSubstitute();
-        additionalDamageCalculator.addCalculate(AdditionalMode.ATTACK);
+        //additionalDamageCalculator.addSubstitute();
+        //additionalDamageCalculator.addCalculate(AdditionalMode.ATTACK);
         //additionalDamageCalculator.prevDamageProbabilityList();
 
         long stop = System.currentTimeMillis();
