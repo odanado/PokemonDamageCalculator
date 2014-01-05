@@ -36,6 +36,9 @@ public class AdditionalDamageCalculator extends DamageCalculator {
         initArray(prevDamageProbabilityList1);
         initArray(resultDamageProbabilityList0);
         initArray(resultDamageProbabilityList1);
+
+        prevAdditionalMode[0] = AdditionalMode.NONE;
+        prevAdditionalMode[1] = AdditionalMode.NONE;
         
     }
 
@@ -82,6 +85,10 @@ public class AdditionalDamageCalculator extends DamageCalculator {
         default:
             break;
         }
+        
+        prevAdditionalMode[1] = prevAdditionalMode[0];
+        prevAdditionalMode[0] = additionalMode;
+        prevItems = items;
     }
     
     private void _addCalculate() {
@@ -185,22 +192,15 @@ public class AdditionalDamageCalculator extends DamageCalculator {
     
     public void prevDamageProbabilityList() {
         /* next は何を計算したか保存しておいて再計算 */
-        
-        copyArray(prevDamageProbabilityList0 ,damageProbabilityList0);
-        copyArray(prevDamageProbabilityList1 ,damageProbabilityList1);
-        
-    }
-    
-    private void viewArray(double[][] array) {
-        for (int i = 0; i < array.length; i++) {
-            for (int j = 0; j < array[i].length; j++) {
-                if(array[i][j]!=0.0) {
-                    
-                    System.out.print(array[i][j]+" ");
-                }
-            }
-            System.out.println("");
+        if(prevAdditionalMode[0] == AdditionalMode.PREVIOUS) {
+            addCalculate(prevAdditionalMode[1]);
         }
+        else {
+            copyArray(prevDamageProbabilityList0 ,damageProbabilityList0);
+            copyArray(prevDamageProbabilityList1 ,damageProbabilityList1);
+            setItems(prevItems);
+        }
+        
     }
     
     /** 身代わりを設置 */
@@ -221,6 +221,13 @@ public class AdditionalDamageCalculator extends DamageCalculator {
         }
     }
 
+    /** 半減の実 もぐもぐ */
+    private void useBerries() {
+        if(typeCompatibility >= 2.0 && items == Items.BERRIES) {
+            setItems(Items.NONE);
+        }
+    }
+    
     /** おぼんのみ もぐもぐ */
     private void useSitrusBerry() {
         if (items == Items.SITRUS_BERRY) {
@@ -272,8 +279,10 @@ public class AdditionalDamageCalculator extends DamageCalculator {
     /** 計算結果 */ 
     public double[][] resultDamageProbabilityList0    = new double[MAX_DAMAGE][MAX_DAMAGE / 4 + 1];
     public double[][] resultDamageProbabilityList1    = new double[MAX_DAMAGE][MAX_DAMAGE / 4 + 1];
-    
 
+    private AdditionalMode[] prevAdditionalMode = new AdditionalMode[2];
+    private Items prevItems;
+    
     private boolean isFirstCalculate;
 
     protected final int MAX_HP;
