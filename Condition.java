@@ -48,6 +48,9 @@ public class Condition {
     
     /** フレンドガードか */
     protected boolean isFriendGuard = false;
+    
+    /** 音技か(身代わり貫通するか) */
+    protected boolean isSoundMove;
 
     
     /**
@@ -66,7 +69,7 @@ public class Condition {
      */
     public Condition(boolean isPlusWeather, boolean isMinusWeather, boolean isWaterSport, boolean isBurn, 
             boolean isBenefitSandstorm, boolean isHelpingHand, boolean isDoubleDamage, boolean isAttackBonus, 
-            boolean isHPMax, boolean isReflect, boolean isDoubleReflect, boolean inFriendGuard) {
+            boolean isHPMax, boolean isReflect, boolean isDoubleReflect, boolean inFriendGuard, boolean isSoundMove) {
         super();
         this.isPlusWeather = isPlusWeather;
         this.isMinusWeather = isMinusWeather;
@@ -80,10 +83,223 @@ public class Condition {
         this.isReflect = isReflect;
         this.isDoubleReflect = isDoubleReflect;
         this.isFriendGuard = inFriendGuard;
+        this.isSoundMove = isSoundMove;
     }
     
+
     public Condition() {
-        this(false, false, false, false, false, false, false, false, false, false, false,false);
+        this(false, false, false, false, false, false, false, false, false, false, false,false,false);
+    }
+
+    
+    /**
+     * isSoundMoveを取得します
+     * @return isSoundMove
+     */
+    public boolean isSoundMove() {
+        return this.isSoundMove;
+    }
+
+
+    /**
+     * isSoundMoveを設定します
+     * @param isSoundMove
+     */
+    public void setSoundMove(boolean isSoundMove) {
+        this.isSoundMove = isSoundMove;
+    }
+
+
+    /**
+     * isPlusWeatherを取得します
+     * @return isPlusWeather
+     */
+    public boolean isPlusWeather() {
+        return this.isPlusWeather;
+    }
+
+    /**
+     * isPlusWeatherを設定します
+     * @param isPlusWeather
+     */
+    public void setPlusWeather(boolean isPlusWeather) {
+        this.isPlusWeather = isPlusWeather;
+    }
+
+    /**
+     * isMinusWeatherを取得します
+     * @return isMinusWeather
+     */
+    public boolean isMinusWeather() {
+        return this.isMinusWeather;
+    }
+
+    /**
+     * isMinusWeatherを設定します
+     * @param isMinusWeather
+     */
+    public void setMinusWeather(boolean isMinusWeather) {
+        this.isMinusWeather = isMinusWeather;
+    }
+
+    /**
+     * isWaterSportを取得します
+     * @return isWaterSport
+     */
+    public boolean isWaterSport() {
+        return this.isWaterSport;
+    }
+
+    /**
+     * isWaterSportを設定します
+     * @param isWaterSport
+     */
+    public void setWaterSport(boolean isWaterSport) {
+        this.isWaterSport = isWaterSport;
+    }
+
+    /**
+     * isBurnを取得します
+     * @return isBurn
+     */
+    public boolean isBurn() {
+        return this.isBurn;
+    }
+
+    /**
+     * isBurnを設定します
+     * @param isBurn
+     */
+    public void setBurn(boolean isBurn) {
+        this.isBurn = isBurn;
+    }
+
+    /**
+     * isBenefitSandstormを取得します
+     * @return isBenefitSandstorm
+     */
+    public boolean isBenefitSandstorm() {
+        return this.isBenefitSandstorm;
+    }
+
+    /**
+     * isBenefitSandstormを設定します
+     * @param isBenefitSandstorm
+     */
+    public void setBenefitSandstorm(boolean isBenefitSandstorm) {
+        this.isBenefitSandstorm = isBenefitSandstorm;
+    }
+
+    /**
+     * isHelpingHandを取得します
+     * @return isHelpingHand
+     */
+    public boolean isHelpingHand() {
+        return this.isHelpingHand;
+    }
+
+    /**
+     * isHelpingHandを設定します
+     * @param isHelpingHand
+     */
+    public void setHelpingHand(boolean isHelpingHand) {
+        this.isHelpingHand = isHelpingHand;
+    }
+
+    /**
+     * isDoubleDamageを取得します
+     * @return isDoubleDamage
+     */
+    public boolean isDoubleDamage() {
+        return this.isDoubleDamage;
+    }
+
+    /**
+     * isDoubleDamageを設定します
+     * @param isDoubleDamage
+     */
+    public void setDoubleDamage(boolean isDoubleDamage) {
+        this.isDoubleDamage = isDoubleDamage;
+    }
+
+    /**
+     * isAttackBonusを取得します
+     * @return isAttackBonus
+     */
+    public boolean isAttackBonus() {
+        return this.isAttackBonus;
+    }
+
+    /**
+     * isAttackBonusを設定します
+     * @param isAttackBonus
+     */
+    public void setAttackBonus(boolean isAttackBonus) {
+        this.isAttackBonus = isAttackBonus;
+    }
+
+    /**
+     * isHPMaxを取得します
+     * @return isHPMax
+     */
+    public boolean isHPMax() {
+        return this.isHPMax;
+    }
+
+    /**
+     * isHPMaxを設定します
+     * @param isHPMax
+     */
+    public void setHPMax(boolean isHPMax) {
+        this.isHPMax = isHPMax;
+    }
+
+    /**
+     * isReflectを取得します
+     * @return isReflect
+     */
+    public boolean isReflect() {
+        return this.isReflect;
+    }
+
+    /**
+     * isReflectを設定します
+     * @param isReflect
+     */
+    public void setReflect(boolean isReflect) {
+        this.isReflect = isReflect;
+    }
+
+    /**
+     * isDoubleReflectを取得します
+     * @return isDoubleReflect
+     */
+    public boolean isDoubleReflect() {
+        return this.isDoubleReflect;
+    }
+
+    /**
+     * isDoubleReflectを設定します
+     * @param isDoubleReflect
+     */
+    public void setDoubleReflect(boolean isDoubleReflect) {
+        this.isDoubleReflect = isDoubleReflect;
+    }
+
+    /**
+     * isFriendGuardを取得します
+     * @return isFriendGuard
+     */
+    public boolean isFriendGuard() {
+        return this.isFriendGuard;
+    }
+
+    /**
+     * isFriendGuardを設定します
+     * @param isFriendGuard
+     */
+    public void setFriendGuard(boolean isFriendGuard) {
+        this.isFriendGuard = isFriendGuard;
     }
 
 }

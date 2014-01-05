@@ -18,15 +18,20 @@ public class Main {
      */
     public static void main(String[] args) {
         long start = System.currentTimeMillis();
+        
+        Condition condition = new Condition();
+        condition.setAttackBonus(true);
+        condition.setSoundMove(true);
+        
+        
         AdditionalDamageCalculator additionalDamageCalculator = new AdditionalDamageCalculator(
-                70, 0, 116, 0,183, 120, 50, 0, 1.0, Abilities.NONE, Items.BERRIES, 
-                new Condition(false, false, false, false, false, false, false, true, false, false, false, false));
+                70, 0, 116, 0,183, 120, 50, 0, 1.0, Abilities.NONE, Items.BERRIES, condition);
 
 
         
         additionalDamageCalculator.addCalculate(AdditionalMode.ATTACK);
-        additionalDamageCalculator.addCalculate(AdditionalMode.ATTACK_TWO_TO_FIVE_TIMES);
-        additionalDamageCalculator.addCalculate(AdditionalMode.PREVIOUS);
+        additionalDamageCalculator.addCalculate(AdditionalMode.SUBSTITUTE);
+        additionalDamageCalculator.addCalculate(AdditionalMode.ATTACK);
 
         long stop = System.currentTimeMillis();
         for (int i = 0; i < 2048; i++) {
