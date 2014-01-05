@@ -177,6 +177,7 @@ public class AdditionalDamageCalculator extends DamageCalculator {
 
         }
 
+        useBerries();
         useSitrusBerry();
 
 
@@ -204,12 +205,13 @@ public class AdditionalDamageCalculator extends DamageCalculator {
     public void prevDamageProbabilityList() {
         /* next は何を計算したか保存しておいて再計算 */
         if(prevAdditionalMode[0] == AdditionalMode.PREVIOUS) {
+            items = prevItems;
             addCalculate(prevAdditionalMode[1]);
         }
         else {
             copyArray(prevDamageProbabilityList0 ,damageProbabilityList0);
             copyArray(prevDamageProbabilityList1 ,damageProbabilityList1);
-            setItems(prevItems);
+            items = prevItems;
         }
         
     }

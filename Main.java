@@ -25,23 +25,23 @@ public class Main {
         
         
         AdditionalDamageCalculator additionalDamageCalculator = new AdditionalDamageCalculator(
-                70, 0, 116, 0,183, 120, 50, 0, 1.0, Abilities.NONE, Items.BERRIES, condition);
+                70, 0, 116, 0,183, 120, 50, 0, 2.0, Abilities.NONE, Items.BERRIES, condition);
 
 
-        
+
         additionalDamageCalculator.addCalculate(AdditionalMode.ATTACK);
-        additionalDamageCalculator.addCalculate(AdditionalMode.SUBSTITUTE);
         additionalDamageCalculator.addCalculate(AdditionalMode.ATTACK);
+        additionalDamageCalculator.addCalculate(AdditionalMode.PREVIOUS);
 
         long stop = System.currentTimeMillis();
         for (int i = 0; i < 2048; i++) {
             for (int j = 0; j <= 183 / 4; j++) {
                 if (additionalDamageCalculator.resultDamageProbabilityList1[i][j] != 0.0) {
-                    System.out.println(String.format("%d\t+ (%d) %.2f" + "%%", i, j,
+                    System.out.println(String.format("%d\t+ (%d)\t%.2f" + "%%", i, j,
                             additionalDamageCalculator.resultDamageProbabilityList1[i][j] * 100));
                 }
                 if (additionalDamageCalculator.resultDamageProbabilityList0[i][j] != 0.0) {
-                    System.out.println(String.format("%d(盆)\t+ (%d) %.2f" + "%%", i, j,
+                    System.out.println(String.format("%d(盆)\t+ (%d)\t%.2f" + "%%", i, j,
                             additionalDamageCalculator.resultDamageProbabilityList0[i][j] * 100));
                 }
             }
