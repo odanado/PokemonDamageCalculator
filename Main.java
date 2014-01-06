@@ -28,11 +28,11 @@ public class Main {
 
 
 
-        //additionalDamageCalculator.addCalculate(AdditionalMode.SUBSTITUTE);
-        additionalDamageCalculator.addCalculate(AdditionalMode.ATTACK);
-        //additionalDamageCalculator.addCalculate(AdditionalMode.ATTACK_TWO_TO_FIVE_TIMES);
-        additionalDamageCalculator.addCalculate(AdditionalMode.PREVIOUS);
-        additionalDamageCalculator.addCalculate(AdditionalMode.ATTACK);
+        additionalDamageCalculator.addCalculate(AdditionalMode.SUBSTITUTE);
+        additionalDamageCalculator.addCalculate(AdditionalMode.ATTACK_TWO_TO_FIVE_TIMES);
+        //additionalDamageCalculator.addCalculate(AdditionalMode.ATTACK);
+        //additionalDamageCalculator.addCalculate(AdditionalMode.PREVIOUS);
+        //additionalDamageCalculator.addCalculate(AdditionalMode.ATTACK);
 
         long stop = System.currentTimeMillis();
         for (int i = 0; i < 2048; i++) {

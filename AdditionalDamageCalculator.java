@@ -54,9 +54,18 @@ public class AdditionalDamageCalculator extends DamageCalculator {
             break;
         case ATTACK_TWO_TIMES:
             saveDamageProbabilityList();
+            _addCalculate();
+            _addCalculate();
+            addresultDamageProbabilityList(1.0);
             break;
         case ATTACK_FIVE_TIMES:
             saveDamageProbabilityList();
+            _addCalculate();
+            _addCalculate();
+            _addCalculate();
+            _addCalculate();
+            _addCalculate();
+            addresultDamageProbabilityList(1.0);
             break;
         case ATTACK_TWO_TO_FIVE_TIMES:
             saveDamageProbabilityList();
