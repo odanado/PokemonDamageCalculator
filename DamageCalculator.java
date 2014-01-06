@@ -64,6 +64,10 @@ public class DamageCalculator {
         this.abilities = abilities;
         this.items = items;
         this.condition = condition;
+        
+
+        probabilityWithoutCritical = 1.0/16.0 * (1 - CRITICAL_PROBABILITY[criticalRand+1]);
+        probabilityWithCritical    = 1.0/16.0 * CRITICAL_PROBABILITY[criticalRand+1];
 
         makePowerValue();
         makeAttackValue();
@@ -86,9 +90,6 @@ public class DamageCalculator {
          *  ×【フィルター等0.75,マルチスケイル0.5,たつじんのおび1.2,いのちのたま1.3,メトロノーム1.0→1.2→1.4→1.6→1.8→2.0, フレンドガード0.75,リフレクター等(最後に五捨六入)】
          */
 
-        probabilityWithoutCritical = 1.0/16.0 * (1 - CRITICAL_PROBABILITY[criticalRand+1]);
-        probabilityWithCritical    = 1.0/16.0 * CRITICAL_PROBABILITY[criticalRand+1];
-        
         
         double random = 0.0;
         
@@ -178,6 +179,90 @@ public class DamageCalculator {
             System.out.println(String.format("%d, %d",damageWithCritical[i],damageWithoutCritical[i]));
         }
         */
+    }
+
+    /**
+     * 身代わりのダメージ計算をします
+     * と言っても、半減の実を無視するだけ
+     * 
+     * 
+     */
+    protected void calculateSubstituteDamage() {
+        
+        double random = 0.0;
+        
+        int criticalDamageValue = baseDamageValue;
+        
+        /* スナイパーか */
+        if(abilities == Abilities.SNIPER) {
+            criticalDamageValue *= 1.5;
+        }
+        
+        /* 乱数と急所 */
+        for(int i=0; i<16; i++) {
+            random = (85.0 + i) / 100.0;
+            SubstituteDamageWithoutCritical[i] = (int) (baseDamageValue * random);
+            SubstituteDamageWithCritical[i]    = (int) (criticalDamageValue * 1.5);
+            SubstituteDamageWithCritical[i]    = (int) (SubstituteDamageWithCritical[i] * random);
+            
+        }
+        
+        /* タイプ一致か(てきおうりょくか) */
+        if(condition.isAttackBonus) {
+            double attackBonus;
+            if(abilities == Abilities.ADAPTABILITY) {
+                attackBonus = 2.0;
+            }
+            else {
+                attackBonus = 1.5;
+            }
+            for(int i=0; i<16; i++) {
+                SubstituteDamageWithoutCritical[i] *= attackBonus;
+                SubstituteDamageWithCritical[i]    *= attackBonus;                
+            }
+        }
+        
+        /* タイプ相性 */
+        for(int i=0; i<16; i++) {
+            SubstituteDamageWithoutCritical[i] *= typeCompatibility;
+            SubstituteDamageWithCritical[i]    *= typeCompatibility;                
+        }
+        
+        /* いろめがね */
+        if(abilities == Abilities.TINTED_LENS) {
+            for(int i=0; i<16; i++) {
+                SubstituteDamageWithoutCritical[i] *= 2;
+                SubstituteDamageWithCritical[i]    *= 2;                
+            }
+        }
+        
+        double value = 1.0;
+        double reflect = 1.0;
+        //【フィルター等0.75,マルチスケイル0.5,たつじんのおび1.2,いのちのたま1.3,メトロノーム1.0→1.2→1.4→1.6→1.8→2.0, フレンドガード0.75,リフレクター等(最後に五捨六入)】
+        /* フィルターとマルスケ */
+        if(abilities == Abilities.FILTER) value *= 0.75;
+        if(abilities == Abilities.MULTISCALE && condition.isHPMax) value *= 0.5;
+        
+        /* たつじんのおびといのちのたま */
+        if(items == Items.EXPERT_BELT) value *= 1.2;
+        if(items == Items.LIFE_ORB) value *= 1.3;
+
+        /* フレンドガード */
+        if(condition.isFriendGuard) value *= 0.75;
+        
+        /* リフレクター */
+        if(condition.isReflect) {
+            reflect = 0.5;
+        } 
+        else if(condition.isDoubleReflect) {
+            reflect = 2.0/3.0;
+        }
+        
+        for(int i=0; i<16; i++) {
+            SubstituteDamageWithoutCritical[i] = calcRoundHalfDown(SubstituteDamageWithoutCritical[i] * value * reflect);
+            SubstituteDamageWithCritical[i]    = calcRoundHalfDown(SubstituteDamageWithCritical[i] * value);
+        }
+        
     }
     
     protected void makeBaseDamageValue() {
@@ -341,12 +426,15 @@ public class DamageCalculator {
         
 
     /** 急所でないダメージの確率 */
-    protected double probabilityWithoutCritical;
+    protected final double probabilityWithoutCritical;
     /** 急所の確率 */
-    protected double probabilityWithCritical;
+    protected final double probabilityWithCritical;
 
     protected int[] damageWithoutCritical = new int[16];
     protected int[] damageWithCritical    = new int[16];
+    
+    protected int[] SubstituteDamageWithoutCritical = new int[16];
+    protected int[] SubstituteDamageWithCritical    = new int[16];
     
     protected Abilities abilities;
     protected Items items;

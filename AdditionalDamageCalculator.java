@@ -88,7 +88,6 @@ public class AdditionalDamageCalculator extends DamageCalculator {
         
         prevAdditionalMode[1] = prevAdditionalMode[0];
         prevAdditionalMode[0] = additionalMode;
-        prevItems = items;
     }
     
     private void _addCalculate() {
@@ -102,7 +101,7 @@ public class AdditionalDamageCalculator extends DamageCalculator {
         makeLevelValue();
         makeBaseDamageValue();
         calculateDamage();
-        
+        calculateSubstituteDamage();
 
 
         copyArray(damageProbabilityList0, oldDamageProbabilityList0);
@@ -119,14 +118,14 @@ public class AdditionalDamageCalculator extends DamageCalculator {
 
                 if (oldDamageProbabilityList0[MAX_HP / 4][MAX_HP / 4] == 1.0) {
                     // 身代わりが存在する
-                    int a = condition.isSoundMove ? damageWithoutCritical[i] + MAX_HP / 4 : MAX_HP / 4;
-                    int b = damageWithoutCritical[i] < MAX_HP / 4 ? MAX_HP / 4 - damageWithoutCritical[i] : 0;
+                    int a = condition.isSoundMove ? SubstituteDamageWithoutCritical[i] + MAX_HP / 4 : MAX_HP / 4;
+                    int b = SubstituteDamageWithoutCritical[i] < MAX_HP / 4 ? MAX_HP / 4 - SubstituteDamageWithoutCritical[i] : 0;
                     b = condition.isSoundMove ? MAX_HP / 4 : b;
                     
                     damageProbabilityList0[a][b] += probabilityWithoutCritical;
 
-                    a = condition.isSoundMove ? damageWithCritical[i] + MAX_HP / 4 : MAX_HP / 4;
-                    b = damageWithCritical[i] < MAX_HP / 4 ? MAX_HP / 4 - damageWithCritical[i] : 0;
+                    a = condition.isSoundMove ? SubstituteDamageWithCritical[i] + MAX_HP / 4 : MAX_HP / 4;
+                    b = SubstituteDamageWithCritical[i] < MAX_HP / 4 ? MAX_HP / 4 - SubstituteDamageWithCritical[i] : 0;
                     b = condition.isSoundMove ? MAX_HP / 4 : b;
                     damageProbabilityList0[a][b] += probabilityWithCritical;
                     
@@ -149,26 +148,35 @@ public class AdditionalDamageCalculator extends DamageCalculator {
                     for (int k = 1; k <= MAX_HP / 4; k++) {
                         if (oldDamageProbabilityList0[j][k] != 0.0) {
                             // 身代わりが存在する
-                            int a = condition.isSoundMove ? j + damageWithoutCritical[i] : j;
-                            int b = damageWithoutCritical[i] < k ? k - damageWithoutCritical[i] : 0;
+                            /* 身代わり貫通 */
+                            int a = condition.isSoundMove ? j + SubstituteDamageWithoutCritical[i] : j;
+                            int b = SubstituteDamageWithoutCritical[i] < k ? k - SubstituteDamageWithoutCritical[i] : 0;
                             b = condition.isSoundMove ? k : b;
                             
                             damageProbabilityList0[a][b] += oldDamageProbabilityList0[j][k] * probabilityWithoutCritical;
 
-                            a = condition.isSoundMove ? j + damageWithCritical[i] : j;
-                            b = damageWithCritical[i] < k ? k - damageWithCritical[i] : 0;
+                            a = condition.isSoundMove ? j + SubstituteDamageWithCritical[i] : j;
+                            b = SubstituteDamageWithCritical[i] < k ? k - SubstituteDamageWithCritical[i] : 0;
                             b = condition.isSoundMove ? k : b;
                             
                             damageProbabilityList0[a][b] += oldDamageProbabilityList0[j][k] * probabilityWithCritical;
 
                         }
+                        
                         if (oldDamageProbabilityList1[j][k] != 0.0) {
+                            // きのみ食後
                             // 身代わりが存在する
-                            int a = damageWithoutCritical[i] < k ? k - damageWithoutCritical[i] : 0;
-                            damageProbabilityList1[j][a] += oldDamageProbabilityList1[j][k] * probabilityWithoutCritical;
+                            int a = condition.isSoundMove ? j + SubstituteDamageWithoutCritical[i] : j;
+                            int b = SubstituteDamageWithoutCritical[i] < k ? k - SubstituteDamageWithoutCritical[i] : 0;
+                            b = condition.isSoundMove ? k : b;
+                            
+                            damageProbabilityList1[a][b] += oldDamageProbabilityList1[j][k] * probabilityWithoutCritical;
 
-                            a = damageWithCritical[i] < k ? k - damageWithCritical[i] : 0;
-                            damageProbabilityList1[j][a] += oldDamageProbabilityList1[j][k] * probabilityWithCritical;
+                            a = condition.isSoundMove ? j + SubstituteDamageWithCritical[i] : j;
+                            b = SubstituteDamageWithCritical[i] < k ? k - SubstituteDamageWithCritical[i] : 0;
+                            b = condition.isSoundMove ? k : b;
+                            
+                            damageProbabilityList1[a][b] += oldDamageProbabilityList1[j][k] * probabilityWithCritical;
 
                         }
                     }
@@ -198,6 +206,7 @@ public class AdditionalDamageCalculator extends DamageCalculator {
     }
     
     private void saveDamageProbabilityList() {
+
         copyArray(damageProbabilityList0, prevDamageProbabilityList0);
         copyArray(damageProbabilityList1, prevDamageProbabilityList1);
     }
@@ -212,6 +221,10 @@ public class AdditionalDamageCalculator extends DamageCalculator {
             copyArray(prevDamageProbabilityList0 ,damageProbabilityList0);
             copyArray(prevDamageProbabilityList1 ,damageProbabilityList1);
             items = prevItems;
+        }
+        
+        if(prevAdditionalMode[1] == AdditionalMode.NONE) {
+            isFirstCalculate = true;
         }
         
     }
@@ -237,7 +250,14 @@ public class AdditionalDamageCalculator extends DamageCalculator {
     /** 半減の実 もぐもぐ */
     private void useBerries() {
         if(typeCompatibility >= 2.0 && items == Items.BERRIES) {
-            setItems(Items.NONE);
+            prevItems = items;
+            items = Items.NONE;
+            for (int i = 0; i < MAX_DAMAGE; i++) {
+                for (int j = 0; j <= MAX_HP / 4; j++) {
+                    damageProbabilityList1[i][j] += damageProbabilityList0[i][j];
+                    damageProbabilityList0[i][j] = 0.0;
+                }
+            }
         }
     }
     
@@ -273,16 +293,16 @@ public class AdditionalDamageCalculator extends DamageCalculator {
     private void initArray(double[][]array) {
         for (int i = 0; i < MAX_DAMAGE; i++) {
             for (int j = 0; j < MAX_DAMAGE / 4 + 1; j++) {
-                array[i][j] = 0;
+                array[i][j] = 0.0;
             }
         }
     }
 
     public final int MAX_DAMAGE = 2048;
 
-    /**オボンのみを使用していない [ダメージ][身代わりのHP] */
+    /** きのみを使用していない [ダメージ][身代わりのHP] */
     private double[][] damageProbabilityList0    = new double[MAX_DAMAGE][MAX_DAMAGE / 4 + 1];
-    /**オボンのみを使用した [ダメージ][身代わりのHP] */
+    /** きのみを使用した [ダメージ][身代わりのHP] */
     private double[][] damageProbabilityList1    = new double[MAX_DAMAGE][MAX_DAMAGE / 4 + 1];
 
     /** 状態保存用 */ 
