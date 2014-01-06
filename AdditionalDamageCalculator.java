@@ -115,11 +115,13 @@ public class AdditionalDamageCalculator extends DamageCalculator {
                 // 身代わりの処理をば
                 // 初回なので必ず身代わりのHPはMAX
                 // 初回ではオボンを使用してないので、必ずList0で計算
-
+                
+                int a,b;
+                
                 if (oldDamageProbabilityList0[MAX_HP / 4][MAX_HP / 4] == 1.0) {
                     // 身代わりが存在する
-                    int a = condition.isSoundMove ? SubstituteDamageWithoutCritical[i] + MAX_HP / 4 : MAX_HP / 4;
-                    int b = SubstituteDamageWithoutCritical[i] < MAX_HP / 4 ? MAX_HP / 4 - SubstituteDamageWithoutCritical[i] : 0;
+                    a = condition.isSoundMove ? SubstituteDamageWithoutCritical[i] + MAX_HP / 4 : MAX_HP / 4;
+                    b = SubstituteDamageWithoutCritical[i] < MAX_HP / 4 ? MAX_HP / 4 - SubstituteDamageWithoutCritical[i] : 0;
                     b = condition.isSoundMove ? MAX_HP / 4 : b;
                     
                     damageProbabilityList0[a][b] += probabilityWithoutCritical;
@@ -131,19 +133,38 @@ public class AdditionalDamageCalculator extends DamageCalculator {
                     
                 } else {
                     // 身代わりが存在しない
-                    damageProbabilityList0[damageWithoutCritical[i]][0] += probabilityWithoutCritical;
-                    damageProbabilityList0[damageWithCritical[i]][0]    += probabilityWithCritical;
+                    if(items == Items.BERRIES && typeCompatibility >= 2.0) {
+
+                        damageProbabilityList1[damageWithoutCritical[i]][0] += probabilityWithoutCritical;
+                        damageProbabilityList1[damageWithCritical[i]][0]    += probabilityWithCritical;
+                    }
+                    else {
+                        damageProbabilityList0[damageWithoutCritical[i]][0] += probabilityWithoutCritical;
+                        damageProbabilityList0[damageWithCritical[i]][0]    += probabilityWithCritical;
+                        
+                    }
+                    
                 }
             }
         } else {
             for (int i = 0; i < 16; i++) {
                 for (int j = 0; j < MAX_DAMAGE - damageWithCritical[i]; j++) {
 
-                    damageProbabilityList0[j + damageWithoutCritical[i]][0] += oldDamageProbabilityList0[j][0] * probabilityWithoutCritical;
-                    damageProbabilityList0[j + damageWithCritical[i]][0]    += oldDamageProbabilityList0[j][0] * probabilityWithCritical;
-
-                    damageProbabilityList1[j + damageWithoutCritical[i]][0] += oldDamageProbabilityList1[j][0] * probabilityWithoutCritical;
-                    damageProbabilityList1[j + damageWithCritical[i]][0]    += oldDamageProbabilityList1[j][0] * probabilityWithCritical;
+                    
+                    if(items == Items.BERRIES && typeCompatibility >= 2.0 && j + SubstituteDamageWithCritical[i] < 2048) {
+                        damageProbabilityList1[j + damageWithoutCritical[i]][0] += oldDamageProbabilityList0[j][0] * probabilityWithoutCritical;
+                        damageProbabilityList1[j + damageWithCritical[i]][0]    += oldDamageProbabilityList0[j][0] * probabilityWithCritical;
+                        damageProbabilityList1[j + SubstituteDamageWithoutCritical[i]][0] += oldDamageProbabilityList1[j][0] * probabilityWithoutCritical;
+                        damageProbabilityList1[j + SubstituteDamageWithCritical[i]][0]    += oldDamageProbabilityList1[j][0] * probabilityWithCritical;
+                        
+                    }
+                    else {
+                        damageProbabilityList0[j + damageWithoutCritical[i]][0] += oldDamageProbabilityList0[j][0] * probabilityWithoutCritical;
+                        damageProbabilityList0[j + damageWithCritical[i]][0]    += oldDamageProbabilityList0[j][0] * probabilityWithCritical;
+                        damageProbabilityList1[j + damageWithoutCritical[i]][0] += oldDamageProbabilityList1[j][0] * probabilityWithoutCritical;
+                        damageProbabilityList1[j + damageWithCritical[i]][0]    += oldDamageProbabilityList1[j][0] * probabilityWithCritical;
+                    }
+                    
 
                     for (int k = 1; k <= MAX_HP / 4; k++) {
                         if (oldDamageProbabilityList0[j][k] != 0.0) {
@@ -185,7 +206,6 @@ public class AdditionalDamageCalculator extends DamageCalculator {
 
         }
 
-        useBerries();
         useSitrusBerry();
 
 
@@ -214,13 +234,11 @@ public class AdditionalDamageCalculator extends DamageCalculator {
     public void prevDamageProbabilityList() {
         /* next は何を計算したか保存しておいて再計算 */
         if(prevAdditionalMode[0] == AdditionalMode.PREVIOUS) {
-            items = prevItems;
             addCalculate(prevAdditionalMode[1]);
         }
         else {
             copyArray(prevDamageProbabilityList0 ,damageProbabilityList0);
             copyArray(prevDamageProbabilityList1 ,damageProbabilityList1);
-            items = prevItems;
         }
         
         if(prevAdditionalMode[1] == AdditionalMode.NONE) {
@@ -244,20 +262,6 @@ public class AdditionalDamageCalculator extends DamageCalculator {
             }
             useSitrusBerry();
 
-        }
-    }
-
-    /** 半減の実 もぐもぐ */
-    private void useBerries() {
-        if(typeCompatibility >= 2.0 && items == Items.BERRIES) {
-            prevItems = items;
-            items = Items.NONE;
-            for (int i = 0; i < MAX_DAMAGE; i++) {
-                for (int j = 0; j <= MAX_HP / 4; j++) {
-                    damageProbabilityList1[i][j] += damageProbabilityList0[i][j];
-                    damageProbabilityList0[i][j] = 0.0;
-                }
-            }
         }
     }
     

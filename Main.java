@@ -28,11 +28,11 @@ public class Main {
 
 
 
-        additionalDamageCalculator.addCalculate(AdditionalMode.SUBSTITUTE);
-        //additionalDamageCalculator.addCalculate(AdditionalMode.ATTACK_TWO_TO_FIVE_TIMES);
+        //additionalDamageCalculator.addCalculate(AdditionalMode.SUBSTITUTE);
         additionalDamageCalculator.addCalculate(AdditionalMode.ATTACK);
-        //additionalDamageCalculator.addCalculate(AdditionalMode.ATTACK);
-        //additionalDamageCalculator.addCalculate(AdditionalMode.ATTACK);
+        //additionalDamageCalculator.addCalculate(AdditionalMode.ATTACK_TWO_TO_FIVE_TIMES);
+        additionalDamageCalculator.addCalculate(AdditionalMode.PREVIOUS);
+        additionalDamageCalculator.addCalculate(AdditionalMode.ATTACK);
 
         long stop = System.currentTimeMillis();
         for (int i = 0; i < 2048; i++) {
@@ -42,7 +42,7 @@ public class Main {
                             additionalDamageCalculator.resultDamageProbabilityList1[i][j] * 100));
                 }
                 if (additionalDamageCalculator.resultDamageProbabilityList0[i][j] != 0.0) {
-                    System.out.println(String.format("%d(きのみ)\t+ (%d)\t%.2f" + "%%", i, j,
+                    System.out.println(String.format("%d(盆)\t+ (%d)\t%.2f" + "%%", i, j,
                             additionalDamageCalculator.resultDamageProbabilityList0[i][j] * 100));
                 }
             }
