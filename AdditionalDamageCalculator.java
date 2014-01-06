@@ -36,6 +36,9 @@ public class AdditionalDamageCalculator extends DamageCalculator {
         initArray(prevDamageProbabilityList1);
         initArray(resultDamageProbabilityList0);
         initArray(resultDamageProbabilityList1);
+        
+        damageProbabilityList0[0][0] = 1.0;
+        resultDamageProbabilityList0[0][0] = 1.0;
 
         prevAdditionalMode[0] = AdditionalMode.NONE;
         prevAdditionalMode[1] = AdditionalMode.NONE;
@@ -214,12 +217,30 @@ public class AdditionalDamageCalculator extends DamageCalculator {
             }
 
         }
-
+        
+        sturdy(oldDamageProbabilityList0[0][0]);
+        
         useSitrusBerry();
 
 
     }
 
+
+    /**
+     * がんじょう 発動
+     */
+    void sturdy(double d) {
+        System.out.println(d);
+        if(d == 1.0) {
+            for (int j = 0; j < MAX_HP / 4 + 1; j++) {
+                for (int i = MAX_HP; i < MAX_DAMAGE; i++) {
+                    damageProbabilityList0[MAX_HP - 1][j] += damageProbabilityList0[i][j];
+                    damageProbabilityList0[i][j] = 0.0;
+                }
+            }
+        }
+    }
+    
     /**
      * resultDamageProbabilityList に足し算
      * d は 確率の重み
@@ -327,7 +348,6 @@ public class AdditionalDamageCalculator extends DamageCalculator {
     public double[][] resultDamageProbabilityList1    = new double[MAX_DAMAGE][MAX_DAMAGE / 4 + 1];
 
     private AdditionalMode[] prevAdditionalMode = new AdditionalMode[2];
-    private Items prevItems;
     
     private boolean isFirstCalculate;
 

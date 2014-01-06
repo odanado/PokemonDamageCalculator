@@ -24,13 +24,13 @@ public class Main {
         
         
         AdditionalDamageCalculator additionalDamageCalculator = new AdditionalDamageCalculator(
-                70, 0, 116, 0,183, 120, 50, 0, 2.0, Abilities.NONE, Items.BERRIES, condition);
+                300, 0, 116, 0,183, 120, 50, 0, 1.0, Abilities.STURDY, Items.NONE, condition);
 
 
 
-        additionalDamageCalculator.addCalculate(AdditionalMode.SUBSTITUTE);
-        additionalDamageCalculator.addCalculate(AdditionalMode.ATTACK_TWO_TO_FIVE_TIMES);
-        //additionalDamageCalculator.addCalculate(AdditionalMode.ATTACK);
+        //additionalDamageCalculator.addCalculate(AdditionalMode.SUBSTITUTE);
+        //additionalDamageCalculator.addCalculate(AdditionalMode.ATTACK_TWO_TO_FIVE_TIMES);
+        additionalDamageCalculator.addCalculate(AdditionalMode.ATTACK);
         //additionalDamageCalculator.addCalculate(AdditionalMode.PREVIOUS);
         //additionalDamageCalculator.addCalculate(AdditionalMode.ATTACK);
 
