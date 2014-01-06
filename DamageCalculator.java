@@ -268,9 +268,7 @@ public class DamageCalculator {
     protected void makeBaseDamageValue() {
         /*
          * 【ダメージ】= (【レベル定数】×【補正後威力】×【補正後攻撃】÷【補正後防御(切捨)】÷【50(切捨)】×【たいねつ等0.5(切捨)】＋2)
-         * ×【全体技0.75(五捨)】×【天候0.5,1.5(切捨)】×【急所】×【乱数(切捨)】×【タイプ一致,てきおうりょく(切捨)】
-         * ×【相性(切捨)】×【半減きのみ0.5(切捨)】×【いろめがね2.0】
-         * ×【フィルター等0.75,マルチスケイル0.5,たつじんのおび1.2,いのちのたま1.3,メトロノーム1.0→1.2→1.4→1.6→1.8→2.0, フレンドガード0.75,リフレクター等(最後に五捨六入)】
+         * ×【全体技0.75(五捨)】×【天候0.5,1.5(切捨)】×
          */
         
         baseDamageValue = levelValue * powerValue * attackValue / defenseValue;
@@ -285,6 +283,9 @@ public class DamageCalculator {
         
         /* ダブルダメージ */ 
         if(condition.isDoubleDamage) baseDamageValue = calcRoundHalfDown(baseDamageValue * 0.75);
+        
+        /* おやこあい */
+        if(abilities == Abilities.PARENTAL_BOND) baseDamageValue /= 2;
         
         /* 天候 */
         if(condition.isPlusWeather) baseDamageValue *= 1.5;
@@ -301,21 +302,28 @@ public class DamageCalculator {
          *  ×【道具1.1(五捨)】×【特性かんそうはだ1.25(五捨)】×【みずあそび等1/3(切捨)】【特性もうか1.5,2.0(切捨)】
          */
         
-        /* 特性 道具 1.2倍 */
+        /* てつのこぶし */
         if(abilities == Abilities.IRON_FIST) powerValue = (int)Math.ceil(powerValue * 1.2);
+        
+        /* プレート系 */
         if(items == Items.PLATES) powerValue = calcRoundHalfDown(powerValue * 1.2);
         
         /* てだすけ */
         if(condition.isHelpingHand) powerValue *= 1.5;
 
-        /* 特性 1.5倍 道具 1.3倍 */
+        /* テクニシャン ねつぼうそう どくぼうそう */
         if(abilities == Abilities.TECHNICIAN) powerValue *= 1.5;
         if(abilities == Abilities.FLARE_BOOST) powerValue *= 1.5;
+        if(abilities == Abilities.TOXIC_BOOST) powerValue *= 1.5;
+        
+        /* ジュエル */
         if(items == Items.JEWELS) powerValue *= 1.3;
 
-        /* 特性 0.75,1.25,1.3倍 */
+        /* とうそうしん */
         if(abilities == Abilities.RIVALRY_PLUS) powerValue = calcRoundHalfDown(powerValue * 1.25);
         if(abilities == Abilities.RIVALRY_MINUS) powerValue = calcRoundHalfDown(powerValue * 0.75);
+        
+        /* ちからずく すなのちから */
         if(abilities == Abilities.SHEER_FORCE) powerValue = (int) Math.ceil(powerValue * 1.3);
         if(abilities == Abilities.SAND_FORCE) powerValue = (int) Math.ceil(powerValue * 1.3);
         
@@ -334,7 +342,24 @@ public class DamageCalculator {
         if(abilities == Abilities.PURE_POWER) powerValue *= 2;
         if(abilities == Abilities.HUGE_POWER) powerValue *= 2;
         
+        /* ダークオーラ フェアリーオーラ */
+        if(abilities == Abilities.DARK_AURA) powerValue = (int) Math.ceil(powerValue * 1.33);
+        if(abilities == Abilities.FAIRY_AURA) powerValue = (int) Math.ceil(powerValue * 1.33); 
         
+        /* メガランチャー */
+        if(abilities == Abilities.MEGA_LAUNCHER) powerValue *= 1.5;
+        
+        /* スカイスキン フェアリースキン フリーズスキン */
+        if(abilities == Abilities.REFRIGERATE) powerValue = (int) Math.ceil(powerValue * 1.3);
+        if(abilities == Abilities.PIXILATE) powerValue = (int) Math.ceil(powerValue * 1.3);
+        if(abilities == Abilities.AERILATE) powerValue = (int) Math.ceil(powerValue * 1.3);
+
+
+        /* がんじょうあご */
+        if(abilities == Abilities.STRONG_JAW) powerValue *= 1.5;
+        
+        /* かたいつめ */
+        if(abilities == Abilities.TOUGH_CLAWS) powerValue = (int) Math.ceil(powerValue * 1.3);
         
     }
     
@@ -362,6 +387,9 @@ public class DamageCalculator {
         /* ふしぎなウロコ と フラワーギフト */
         if(abilities == Abilities.MARVEL_SCALE) defenseValue *= 1.5;
         if(abilities == Abilities.FLOWER_GIFT)  defenseValue *= 1.5;
+        
+        /* くさのけがわ */
+        if(abilities == Abilities.GRASS_PELT)  defenseValue *= 1.5;
         
     }
     
