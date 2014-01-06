@@ -20,7 +20,7 @@ public enum Items {
     /** 手ぶら... */
     NONE,
     
-    /** ジュエル系 <br> 威力に1.5倍(切捨) */
+    /** ジュエル系 <br> 威力に1.3倍(切捨) */
     JEWELS,
     
     /** こだわりハチマキ <br> 攻撃に1.5倍(切捨) */
@@ -58,5 +58,8 @@ public enum Items {
     
     /** オボンのみ <br> 回復 */
     SITRUS_BERRY,
+    
+    /** きあいのタスキ <br> HPMAX時HP下限1 */
+    FOCUS_SASH,
     
 }

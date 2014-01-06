@@ -219,6 +219,7 @@ public class AdditionalDamageCalculator extends DamageCalculator {
         }
         
         sturdy(oldDamageProbabilityList0[0][0]);
+        focusSash(oldDamageProbabilityList0[0][0]);
         
         useSitrusBerry();
 
@@ -230,8 +231,22 @@ public class AdditionalDamageCalculator extends DamageCalculator {
      * がんじょう 発動
      */
     void sturdy(double d) {
-        System.out.println(d);
-        if(d == 1.0) {
+        if(abilities == Abilities.STURDY && d == 1.0) {
+            for (int j = 0; j < MAX_HP / 4 + 1; j++) {
+                for (int i = MAX_HP; i < MAX_DAMAGE; i++) {
+                    damageProbabilityList0[MAX_HP - 1][j] += damageProbabilityList0[i][j];
+                    damageProbabilityList0[i][j] = 0.0;
+                }
+            }
+        }
+    }
+    
+    /**
+     * きあいのタスキ
+     * @param d
+     */
+    void focusSash(double d) {
+        if(items == Items.FOCUS_SASH && d == 1.0) {
             for (int j = 0; j < MAX_HP / 4 + 1; j++) {
                 for (int i = MAX_HP; i < MAX_DAMAGE; i++) {
                     damageProbabilityList0[MAX_HP - 1][j] += damageProbabilityList0[i][j];
