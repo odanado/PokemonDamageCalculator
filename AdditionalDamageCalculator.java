@@ -53,13 +53,13 @@ public class AdditionalDamageCalculator extends DamageCalculator {
         case ATTACK:
             saveDamageProbabilityList();
             _addCalculate();
-            addresultDamageProbabilityList(1.0);
+            addResultDamageProbabilityList(1.0);
             break;
         case ATTACK_TWO_TIMES:
             saveDamageProbabilityList();
             _addCalculate();
             _addCalculate();
-            addresultDamageProbabilityList(1.0);
+            addResultDamageProbabilityList(1.0);
             break;
         case ATTACK_FIVE_TIMES:
             saveDamageProbabilityList();
@@ -68,31 +68,31 @@ public class AdditionalDamageCalculator extends DamageCalculator {
             _addCalculate();
             _addCalculate();
             _addCalculate();
-            addresultDamageProbabilityList(1.0);
+            addResultDamageProbabilityList(1.0);
             break;
         case ATTACK_TWO_TO_FIVE_TIMES:
             saveDamageProbabilityList();
             _addCalculate();
             _addCalculate();
-            addresultDamageProbabilityList(3.0/8.0);
+            addResultDamageProbabilityList(3.0/8.0);
             
             _addCalculate();
-            addresultDamageProbabilityList(3.0/8.0);
+            addResultDamageProbabilityList(3.0/8.0);
             
             _addCalculate();
-            addresultDamageProbabilityList(1.0/8.0);
+            addResultDamageProbabilityList(1.0/8.0);
             
             _addCalculate();
-            addresultDamageProbabilityList(1.0/8.0);
+            addResultDamageProbabilityList(1.0/8.0);
             break;
         case SUBSTITUTE:
             saveDamageProbabilityList();
             addSubstitute();
-            addresultDamageProbabilityList(1.0);
+            addResultDamageProbabilityList(1.0);
             break;
         case PREVIOUS:
             prevDamageProbabilityList();
-            addresultDamageProbabilityList(1.0);
+            addResultDamageProbabilityList(1.0);
             break;
         default:
             break;
@@ -226,11 +226,81 @@ public class AdditionalDamageCalculator extends DamageCalculator {
 
     }
 
+    /**
+     * HP回復
+     * @param constant
+     */
+    public void recovery(int constant) {
 
+        saveDamageProbabilityList();
+        double[][] oldDamageProbabilityList0 = new double[MAX_DAMAGE][MAX_DAMAGE / 4 + 1];
+        double[][] oldDamageProbabilityList1 = new double[MAX_DAMAGE][MAX_DAMAGE / 4 + 1];
+        copyArray(damageProbabilityList0, oldDamageProbabilityList0);
+        copyArray(damageProbabilityList1, oldDamageProbabilityList1);
+        initArray(damageProbabilityList0);
+        initArray(damageProbabilityList1);
+        
+        for (int i = 0; i < MAX_HP; i++) {
+            int a = constant < i ? i - constant : 0;
+            for (int j = 0; j < MAX_HP / 4 + 1; j++) {
+                damageProbabilityList0[a][j] += oldDamageProbabilityList0[i][j];
+                damageProbabilityList1[a][j] += oldDamageProbabilityList1[i][j];
+            }
+
+        }
+        
+        updateResultDamageProbabilityList();
+    }
+    
+    /**
+     * HP回復
+     * MAX_HP の a / b だけ回復
+     * @param a
+     * @param b
+     */
+    public void recovery(int a,int b) {
+        recovery(MAX_HP * a / b); 
+    }
+    
+    /**
+     * HPダメージ
+     * @param constant
+     */
+    public void damage(int constant) {
+        saveDamageProbabilityList();
+        double[][] oldDamageProbabilityList0 = new double[MAX_DAMAGE][MAX_DAMAGE / 4 + 1];
+        double[][] oldDamageProbabilityList1 = new double[MAX_DAMAGE][MAX_DAMAGE / 4 + 1];
+        copyArray(damageProbabilityList0, oldDamageProbabilityList0);
+        copyArray(damageProbabilityList1, oldDamageProbabilityList1);
+        initArray(damageProbabilityList0);
+        initArray(damageProbabilityList1);
+        
+        for (int i = 0; i < MAX_HP; i++) {
+            int a = constant + i;
+            for (int j = 0; j < MAX_HP / 4 + 1; j++) {
+                damageProbabilityList0[a][j] += oldDamageProbabilityList0[i][j];
+                damageProbabilityList1[a][j] += oldDamageProbabilityList1[i][j];
+            }
+
+        }
+        
+        updateResultDamageProbabilityList();
+    }
+
+    /**
+     * HP ダメージ
+     * MAX_HP の a / b だけダメージ
+     * @param a
+     * @param b
+     */
+    public void damage(int a,int b) {
+        damage(MAX_HP * a / b);
+    }
+    
     /**
      * がんじょう 発動
      */
-    void sturdy(double d) {
+    private void sturdy(double d) {
         if(abilities == Abilities.STURDY && d == 1.0) {
             for (int j = 0; j < MAX_HP / 4 + 1; j++) {
                 for (int i = MAX_HP; i < MAX_DAMAGE; i++) {
@@ -245,7 +315,7 @@ public class AdditionalDamageCalculator extends DamageCalculator {
      * きあいのタスキ
      * @param d
      */
-    void focusSash(double d) {
+    private void focusSash(double d) {
         if(items == Items.FOCUS_SASH && d == 1.0) {
             for (int j = 0; j < MAX_HP / 4 + 1; j++) {
                 for (int i = MAX_HP; i < MAX_DAMAGE; i++) {
@@ -261,11 +331,23 @@ public class AdditionalDamageCalculator extends DamageCalculator {
      * d は 確率の重み
      * @param d
      */
-    private void addresultDamageProbabilityList(double d) {
+    private void addResultDamageProbabilityList(double d) {
         for (int i = 0; i < MAX_DAMAGE; i++) {
             for (int j = 0; j < MAX_DAMAGE / 4 + 1; j++) {
                 resultDamageProbabilityList0[i][j] += damageProbabilityList0[i][j] * d;
                 resultDamageProbabilityList1[i][j] += damageProbabilityList1[i][j] * d;
+            }
+        }
+    }
+    
+    /**
+     * resultDamageProbabilityList を上書き
+     */
+    private void updateResultDamageProbabilityList() {
+        for (int i = 0; i < MAX_DAMAGE; i++) {
+            for (int j = 0; j < MAX_DAMAGE / 4 + 1; j++) {
+                resultDamageProbabilityList0[i][j] = damageProbabilityList0[i][j];
+                resultDamageProbabilityList1[i][j] = damageProbabilityList1[i][j];
             }
         }
     }
