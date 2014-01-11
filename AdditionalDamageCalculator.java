@@ -22,9 +22,11 @@ public class AdditionalDamageCalculator extends DamageCalculator {
      * @param items
      * @param condition
      */
-    public AdditionalDamageCalculator(int baseAttackValue, int attackRank, int baseDefenseValue, int defenseRank, int MAX_HP, int basePowerValue, int baseLevelValue, int criticalRand, double typeCompatibility, Abilities abilities, Items items, Condition condition) {
-        super(baseAttackValue, attackRank, baseDefenseValue, defenseRank, basePowerValue, baseLevelValue, criticalRand, typeCompatibility, abilities, items, condition);
-
+    public AdditionalDamageCalculator(int baseAttackValue, int attackRank, int MAX_HP, int baseDefenseValue, int defenseRank, 
+            int basePowerValue,int baseLevelValue, int criticalRand, double typeCompatibility, 
+            Abilities attackAbilities, Items attackItems, Abilities defenseAbilities , Items defenseItems,Condition condition) {
+        super(baseAttackValue, attackRank, baseDefenseValue, defenseRank, basePowerValue, baseLevelValue, criticalRand, typeCompatibility, attackAbilities, attackItems, defenseAbilities, defenseItems, condition);
+        
 
         this.MAX_HP = MAX_HP;
 
@@ -145,7 +147,7 @@ public class AdditionalDamageCalculator extends DamageCalculator {
                     
                 } else {
                     // 身代わりが存在しない
-                    if(items == Items.BERRIES && typeCompatibility >= 2.0) {
+                    if(defenseItems == Items.BERRIES && typeCompatibility >= 2.0) {
 
                         damageProbabilityList1[damageWithoutCritical[i]][0] += probabilityWithoutCritical;
                         damageProbabilityList1[damageWithCritical[i]][0]    += probabilityWithCritical;
@@ -163,7 +165,7 @@ public class AdditionalDamageCalculator extends DamageCalculator {
                 for (int j = 0; j < MAX_DAMAGE - damageWithCritical[i]; j++) {
 
                     
-                    if(items == Items.BERRIES && typeCompatibility >= 2.0 && j + SubstituteDamageWithCritical[i] < 2048) {
+                    if(defenseItems == Items.BERRIES && typeCompatibility >= 2.0 && j + SubstituteDamageWithCritical[i] < 2048) {
                         damageProbabilityList1[j + damageWithoutCritical[i]][0] += oldDamageProbabilityList0[j][0] * probabilityWithoutCritical;
                         damageProbabilityList1[j + damageWithCritical[i]][0]    += oldDamageProbabilityList0[j][0] * probabilityWithCritical;
                         damageProbabilityList1[j + SubstituteDamageWithoutCritical[i]][0] += oldDamageProbabilityList1[j][0] * probabilityWithoutCritical;
@@ -301,7 +303,7 @@ public class AdditionalDamageCalculator extends DamageCalculator {
      * がんじょう 発動
      */
     private void sturdy(double d) {
-        if(abilities == Abilities.STURDY && d == 1.0) {
+        if(defenseAbilities == Abilities.STURDY && d == 1.0) {
             for (int j = 0; j < MAX_HP / 4 + 1; j++) {
                 for (int i = MAX_HP; i < MAX_DAMAGE; i++) {
                     damageProbabilityList0[MAX_HP - 1][j] += damageProbabilityList0[i][j];
@@ -316,7 +318,7 @@ public class AdditionalDamageCalculator extends DamageCalculator {
      * @param d
      */
     private void focusSash(double d) {
-        if(items == Items.FOCUS_SASH && d == 1.0) {
+        if(defenseItems == Items.FOCUS_SASH && d == 1.0) {
             for (int j = 0; j < MAX_HP / 4 + 1; j++) {
                 for (int i = MAX_HP; i < MAX_DAMAGE; i++) {
                     damageProbabilityList0[MAX_HP - 1][j] += damageProbabilityList0[i][j];
@@ -394,7 +396,7 @@ public class AdditionalDamageCalculator extends DamageCalculator {
     
     /** おぼんのみ もぐもぐ */
     private void useSitrusBerry() {
-        if (items == Items.SITRUS_BERRY) {
+        if (defenseItems == Items.SITRUS_BERRY) {
             for (int i = MAX_HP / 2 + 1; i < MAX_DAMAGE; i++) {
                 /* 死をマージしていいか怪しいかも、結局は死んでるんだけども */
                 int a = i < MAX_HP ? i - MAX_HP / 4 : i;
