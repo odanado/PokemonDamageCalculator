@@ -3,11 +3,18 @@
  */
 package com.odanado.pokemon.calculator.damege;
 
+import java.io.Serializable;
+
 /**
  * @author odan
  * 
  */
-public class AdditionalDamageCalculator extends DamageCalculator {
+public class AdditionalDamageCalculator extends DamageCalculator implements Serializable {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 2L;
 
     /**
      * @param baseAttackValue
@@ -450,7 +457,7 @@ public class AdditionalDamageCalculator extends DamageCalculator {
     
     private boolean isFirstCalculate;
 
-    protected final int MAX_HP;
+    public final int MAX_HP;
 
     
 }

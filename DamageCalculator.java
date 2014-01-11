@@ -34,6 +34,38 @@ package com.odanado.pokemon.calculator.damege;
 public class DamageCalculator {
     
     /**
+     * probabilityWithoutCriticalを取得します
+     * @return probabilityWithoutCritical
+     */
+    public double getProbabilityWithoutCritical() {
+        return this.probabilityWithoutCritical;
+    }
+
+    /**
+     * probabilityWithCriticalを取得します
+     * @return probabilityWithCritical
+     */
+    public double getProbabilityWithCritical() {
+        return this.probabilityWithCritical;
+    }
+
+    /**
+     * damageWithoutCriticalを取得します
+     * @return damageWithoutCritical
+     */
+    public int[] getDamageWithoutCritical() {
+        return this.damageWithoutCritical;
+    }
+
+    /**
+     * damageWithCriticalを取得します
+     * @return damageWithCritical
+     */
+    public int[] getDamageWithCritical() {
+        return this.damageWithCritical;
+    }
+
+    /**
      * 
      * @param baseAttackValue
      * @param attackRank
@@ -461,9 +493,9 @@ public class DamageCalculator {
         
 
     /** 急所でないダメージの確率 */
-    protected final double probabilityWithoutCritical;
+    public final double probabilityWithoutCritical;
     /** 急所の確率 */
-    protected final double probabilityWithCritical;
+    public final double probabilityWithCritical;
 
     protected int[] damageWithoutCritical = new int[16];
     protected int[] damageWithCritical    = new int[16];
