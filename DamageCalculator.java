@@ -32,6 +32,7 @@ package com.odanado.pokemon.calculator.damege;
  * 
  */
 public class DamageCalculator {
+    
     /**
      * 
      * @param baseAttackValue
@@ -42,28 +43,33 @@ public class DamageCalculator {
      * @param baseLevelValue
      * @param criticalRand
      * @param typeCompatibility
-     * @param abilities
-     * @param items
+     * @param attackAbilities
+     * @param attackItems
+     * @param defenseAbilities
+     * @param defenseItems
      * @param condition
      */
-    public DamageCalculator(int baseAttackValue, int attackRank, int baseDefenseValue, int defenseRank, int basePowerValue,int baseLevelValue, 
-                            int criticalRand,double typeCompatibility, Abilities abilities, Items items, Condition condition) {
+    public DamageCalculator(int baseAttackValue, int attackRank, int baseDefenseValue, int defenseRank, 
+            int basePowerValue,int baseLevelValue, int criticalRand, double typeCompatibility, 
+            Abilities attackAbilities, Items attackItems, Abilities defenseAbilities , Items defenseItems,Condition condition) {
 
         this.baseAttackValue = baseAttackValue;
-        this.attackRank = attackRank;
+        this.attackRank      = attackRank;
 
         this.baseDefenseValue = baseDefenseValue;
-        this.defenseRank = defenseRank;
+        this.defenseRank      = defenseRank;
 
         this.basePowerValue = basePowerValue;
         this.baseLevelValue = baseLevelValue;
         
-        this.criticalRand = criticalRand;
+        this.criticalRand      = criticalRand;
         this.typeCompatibility = typeCompatibility;
         
-        this.abilities = abilities;
-        this.items = items;
-        this.condition = condition;
+        this.attackAbilities  = attackAbilities;
+        this.attackItems      = attackItems;
+        this.defenseAbilities = defenseAbilities;
+        this.defenseItems     = defenseItems;
+        this.condition        = condition;
         
 
         probabilityWithoutCritical = 1.0/16.0 * (1 - CRITICAL_PROBABILITY[criticalRand+1]);
@@ -96,7 +102,7 @@ public class DamageCalculator {
         int criticalDamageValue = baseDamageValue;
         
         /* スナイパーか */
-        if(abilities == Abilities.SNIPER) {
+        if(attackAbilities == Abilities.SNIPER) {
             criticalDamageValue *= 1.5;
         }
         
@@ -112,7 +118,7 @@ public class DamageCalculator {
         /* タイプ一致か(てきおうりょくか) */
         if(condition.isAttackBonus) {
             double attackBonus;
-            if(abilities == Abilities.ADAPTABILITY) {
+            if(attackAbilities == Abilities.ADAPTABILITY) {
                 attackBonus = 2.0;
             }
             else {
@@ -132,7 +138,7 @@ public class DamageCalculator {
         
         
         /* 半減の実 */
-        if(items == Items.BERRIES && typeCompatibility >= 2.0) {
+        if(defenseItems == Items.BERRIES && typeCompatibility >= 2.0) {
             for(int i=0; i<16; i++) {
                 damageWithoutCritical[i] *= 0.5;
                 damageWithCritical[i]    *= 0.5;                
@@ -140,7 +146,7 @@ public class DamageCalculator {
         }
         
         /* いろめがね */
-        if(abilities == Abilities.TINTED_LENS) {
+        if(attackAbilities == Abilities.TINTED_LENS) {
             for(int i=0; i<16; i++) {
                 damageWithoutCritical[i] *= 2;
                 damageWithCritical[i]    *= 2;                
@@ -151,12 +157,13 @@ public class DamageCalculator {
         double reflect = 1.0;
         //【フィルター等0.75,マルチスケイル0.5,たつじんのおび1.2,いのちのたま1.3,メトロノーム1.0→1.2→1.4→1.6→1.8→2.0, フレンドガード0.75,リフレクター等(最後に五捨六入)】
         /* フィルターとマルスケ */
-        if(abilities == Abilities.FILTER) value *= 0.75;
-        if(abilities == Abilities.MULTISCALE && condition.isHPMax) value *= 0.5;
+        if(defenseAbilities == Abilities.FILTER) value *= 0.75;
+        if(defenseAbilities == Abilities.MULTISCALE && condition.isHPMax) value *= 0.5;
+        
         
         /* たつじんのおびといのちのたま */
-        if(items == Items.EXPERT_BELT) value *= 1.2;
-        if(items == Items.LIFE_ORB) value *= 1.3;
+        if(attackItems == Items.EXPERT_BELT) value *= 1.2;
+        if(attackItems == Items.LIFE_ORB) value *= 1.3;
 
         /* フレンドガード */
         if(condition.isFriendGuard) value *= 0.75;
@@ -194,7 +201,7 @@ public class DamageCalculator {
         int criticalDamageValue = baseDamageValue;
         
         /* スナイパーか */
-        if(abilities == Abilities.SNIPER) {
+        if(attackAbilities == Abilities.SNIPER) {
             criticalDamageValue *= 1.5;
         }
         
@@ -210,7 +217,7 @@ public class DamageCalculator {
         /* タイプ一致か(てきおうりょくか) */
         if(condition.isAttackBonus) {
             double attackBonus;
-            if(abilities == Abilities.ADAPTABILITY) {
+            if(attackAbilities == Abilities.ADAPTABILITY) {
                 attackBonus = 2.0;
             }
             else {
@@ -229,7 +236,7 @@ public class DamageCalculator {
         }
         
         /* いろめがね */
-        if(abilities == Abilities.TINTED_LENS) {
+        if(attackAbilities == Abilities.TINTED_LENS) {
             for(int i=0; i<16; i++) {
                 SubstituteDamageWithoutCritical[i] *= 2;
                 SubstituteDamageWithCritical[i]    *= 2;                
@@ -240,12 +247,12 @@ public class DamageCalculator {
         double reflect = 1.0;
         //【フィルター等0.75,マルチスケイル0.5,たつじんのおび1.2,いのちのたま1.3,メトロノーム1.0→1.2→1.4→1.6→1.8→2.0, フレンドガード0.75,リフレクター等(最後に五捨六入)】
         /* フィルターとマルスケ */
-        if(abilities == Abilities.FILTER) value *= 0.75;
-        if(abilities == Abilities.MULTISCALE && condition.isHPMax) value *= 0.5;
+        if(defenseAbilities == Abilities.FILTER) value *= 0.75;
+        if(defenseAbilities == Abilities.MULTISCALE && condition.isHPMax) value *= 0.5;
         
         /* たつじんのおびといのちのたま */
-        if(items == Items.EXPERT_BELT) value *= 1.2;
-        if(items == Items.LIFE_ORB) value *= 1.3;
+        if(attackItems == Items.EXPERT_BELT) value *= 1.2;
+        if(attackItems == Items.LIFE_ORB) value *= 1.3;
 
         /* フレンドガード */
         if(condition.isFriendGuard) value *= 0.75;
@@ -275,9 +282,9 @@ public class DamageCalculator {
         baseDamageValue /= 50;
         
         /* たいねつ と あついしぼう と ファーコート */
-        if(abilities == Abilities.THICK_FAT) baseDamageValue /= 2;
-        if(abilities == Abilities.HEATPROOF) baseDamageValue /= 2;
-        if(abilities == Abilities.FUR_COAT)  baseDamageValue /= 2;
+        if(defenseAbilities == Abilities.THICK_FAT) baseDamageValue /= 2;
+        if(defenseAbilities == Abilities.HEATPROOF) baseDamageValue /= 2;
+        if(defenseAbilities == Abilities.FUR_COAT)  baseDamageValue /= 2;
         
         baseDamageValue += 2;
         
@@ -285,7 +292,7 @@ public class DamageCalculator {
         if(condition.isDoubleDamage) baseDamageValue = calcRoundHalfDown(baseDamageValue * 0.75);
         
         /* おやこあい */
-        if(abilities == Abilities.PARENTAL_BOND) baseDamageValue /= 2;
+        if(attackAbilities == Abilities.PARENTAL_BOND) baseDamageValue /= 2;
         
         /* 天候 */
         if(condition.isPlusWeather) baseDamageValue *= 1.5;
@@ -293,7 +300,7 @@ public class DamageCalculator {
         
         
     }
-    
+
     protected void makePowerValue() {
         powerValue = basePowerValue;
         /*
@@ -303,63 +310,63 @@ public class DamageCalculator {
          */
         
         /* てつのこぶし */
-        if(abilities == Abilities.IRON_FIST) powerValue = (int)Math.ceil(powerValue * 1.2);
+        if(attackAbilities == Abilities.IRON_FIST) powerValue = (int)Math.ceil(powerValue * 1.2);
         
         /* プレート系 */
-        if(items == Items.PLATES) powerValue = calcRoundHalfDown(powerValue * 1.2);
+        if(attackItems == Items.PLATES) powerValue = calcRoundHalfDown(powerValue * 1.2);
         
         /* てだすけ */
         if(condition.isHelpingHand) powerValue *= 1.5;
 
         /* テクニシャン ねつぼうそう どくぼうそう */
-        if(abilities == Abilities.TECHNICIAN) powerValue *= 1.5;
-        if(abilities == Abilities.FLARE_BOOST) powerValue *= 1.5;
-        if(abilities == Abilities.TOXIC_BOOST) powerValue *= 1.5;
+        if(attackAbilities == Abilities.TECHNICIAN) powerValue *= 1.5;
+        if(attackAbilities == Abilities.FLARE_BOOST) powerValue *= 1.5;
+        if(attackAbilities == Abilities.TOXIC_BOOST) powerValue *= 1.5;
         
         /* ジュエル */
-        if(items == Items.JEWELS) powerValue *= 1.3;
+        if(attackItems == Items.JEWELS) powerValue *= 1.3;
 
         /* とうそうしん */
-        if(abilities == Abilities.RIVALRY_PLUS) powerValue = calcRoundHalfDown(powerValue * 1.25);
-        if(abilities == Abilities.RIVALRY_MINUS) powerValue = calcRoundHalfDown(powerValue * 0.75);
+        if(attackAbilities == Abilities.RIVALRY_PLUS) powerValue = calcRoundHalfDown(powerValue * 1.25);
+        if(attackAbilities == Abilities.RIVALRY_MINUS) powerValue = calcRoundHalfDown(powerValue * 0.75);
         
         /* ちからずく すなのちから */
-        if(abilities == Abilities.SHEER_FORCE) powerValue = (int) Math.ceil(powerValue * 1.3);
-        if(abilities == Abilities.SAND_FORCE) powerValue = (int) Math.ceil(powerValue * 1.3);
+        if(attackAbilities == Abilities.SHEER_FORCE) powerValue = (int) Math.ceil(powerValue * 1.3);
+        if(attackAbilities == Abilities.SAND_FORCE) powerValue = (int) Math.ceil(powerValue * 1.3);
         
-        /* 道具 1.1倍 */
-        if(items == Items.FOCUS_BAND) powerValue = calcRoundHalfDown(powerValue * 1.1);
-        if(items == Items.WISDOM_GLASSES) powerValue = calcRoundHalfDown(powerValue * 1.1); 
+        /* ちからのハチマキ ものしりメガネ */
+        if(attackItems == Items.FOCUS_BAND) powerValue = calcRoundHalfDown(powerValue * 1.1);
+        if(attackItems == Items.WISDOM_GLASSES) powerValue = calcRoundHalfDown(powerValue * 1.1); 
         
         /* かんそうはだ */
-        if(abilities == Abilities.DRY_SKIN) powerValue = calcRoundHalfDown(powerValue * 1.25);
+        if(defenseAbilities == Abilities.DRY_SKIN) powerValue = calcRoundHalfDown(powerValue * 1.25);
         
         /* みずあそびなど */
         if(condition.isWaterSport) powerValue /= 3;
         
-        /* もうか、ヨガパワー */
-        if(abilities == Abilities.BLAZE) powerValue *= 1.5;
-        if(abilities == Abilities.PURE_POWER) powerValue *= 2;
-        if(abilities == Abilities.HUGE_POWER) powerValue *= 2;
+        /* もうか、ヨガパワー ちからもち */
+        if(attackAbilities == Abilities.BLAZE) powerValue *= 1.5;
+        if(attackAbilities == Abilities.PURE_POWER) powerValue *= 2;
+        if(attackAbilities == Abilities.HUGE_POWER) powerValue *= 2;
         
         /* ダークオーラ フェアリーオーラ */
-        if(abilities == Abilities.DARK_AURA) powerValue = (int) Math.ceil(powerValue * 1.33);
-        if(abilities == Abilities.FAIRY_AURA) powerValue = (int) Math.ceil(powerValue * 1.33); 
+        if(attackAbilities == Abilities.DARK_AURA) powerValue = (int) Math.ceil(powerValue * 1.33);
+        if(attackAbilities == Abilities.FAIRY_AURA) powerValue = (int) Math.ceil(powerValue * 1.33); 
         
         /* メガランチャー */
-        if(abilities == Abilities.MEGA_LAUNCHER) powerValue *= 1.5;
+        if(attackAbilities == Abilities.MEGA_LAUNCHER) powerValue *= 1.5;
         
         /* スカイスキン フェアリースキン フリーズスキン */
-        if(abilities == Abilities.REFRIGERATE) powerValue = (int) Math.ceil(powerValue * 1.3);
-        if(abilities == Abilities.PIXILATE) powerValue = (int) Math.ceil(powerValue * 1.3);
-        if(abilities == Abilities.AERILATE) powerValue = (int) Math.ceil(powerValue * 1.3);
+        if(attackAbilities == Abilities.REFRIGERATE) powerValue = (int) Math.ceil(powerValue * 1.3);
+        if(attackAbilities == Abilities.PIXILATE) powerValue = (int) Math.ceil(powerValue * 1.3);
+        if(attackAbilities == Abilities.AERILATE) powerValue = (int) Math.ceil(powerValue * 1.3);
 
 
         /* がんじょうあご */
-        if(abilities == Abilities.STRONG_JAW) powerValue *= 1.5;
+        if(attackAbilities == Abilities.STRONG_JAW) powerValue *= 1.5;
         
         /* かたいつめ */
-        if(abilities == Abilities.TOUGH_CLAWS) powerValue = (int) Math.ceil(powerValue * 1.3);
+        if(attackAbilities == Abilities.TOUGH_CLAWS) powerValue = (int) Math.ceil(powerValue * 1.3);
         
     }
     
@@ -381,15 +388,15 @@ public class DamageCalculator {
         if(condition.isBenefitSandstorm) defenseValue *= 1.5;
         
         /* しんかのきせき と とつげきチョッキ */
-        if(items == Items.EVOLUTION_STONE) defenseValue *= 1.5;
-        if(items == Items.ASSAULT_VEST)    defenseValue *= 1.5;
+        if(defenseItems == Items.EVOLUTION_STONE) defenseValue *= 1.5;
+        if(defenseItems == Items.ASSAULT_VEST)    defenseValue *= 1.5;
 
         /* ふしぎなウロコ と フラワーギフト */
-        if(abilities == Abilities.MARVEL_SCALE) defenseValue *= 1.5;
-        if(abilities == Abilities.FLOWER_GIFT)  defenseValue *= 1.5;
+        if(defenseAbilities == Abilities.MARVEL_SCALE) defenseValue *= 1.5;
+        if(defenseAbilities == Abilities.FLOWER_GIFT)  defenseValue *= 1.5;
         
         /* くさのけがわ */
-        if(abilities == Abilities.GRASS_PELT)  defenseValue *= 1.5;
+        if(defenseAbilities == Abilities.GRASS_PELT)  defenseValue *= 1.5;
         
     }
     
@@ -413,21 +420,21 @@ public class DamageCalculator {
         }
         
         /* こだわり系 と ふといホネ */
-        if(items == Items.ADHERENCE_HEADBAND) attackValue *= 1.5;
-        if(items == Items.ADHERENCE_GLASSES)  attackValue *= 1.5;
-        if(items == Items.THICK_BONE)         attackValue *= 2.0;
+        if(attackItems == Items.ADHERENCE_HEADBAND) attackValue *= 1.5;
+        if(attackItems == Items.ADHERENCE_GLASSES)  attackValue *= 1.5;
+        if(attackItems == Items.THICK_BONE)         attackValue *= 2.0;
 
         /* スロースタート と よわき */
-        if(abilities == Abilities.SLOW_START) attackValue *= 0.5;
-        if(abilities == Abilities.DEFEATIST)  attackValue *= 0.5;
+        if(attackAbilities == Abilities.SLOW_START) attackValue *= 0.5;
+        if(attackAbilities == Abilities.DEFEATIST)  attackValue *= 0.5;
 
         /* 特性 1.5倍 */
-        if(abilities == Abilities.GUTS)        attackValue *= 1.5;
-        if(abilities == Abilities.HUSTLE)      attackValue *= 1.5;
-        if(abilities == Abilities.SOLAR_POWER) attackValue *= 1.5;
-        if(abilities == Abilities.FLOWER_GIFT) attackValue *= 1.5;
-        if(abilities == Abilities.PLUS)        attackValue *= 1.5;
-        if(abilities == Abilities.MINUS)       attackValue *= 1.5; 
+        if(attackAbilities == Abilities.GUTS)        attackValue *= 1.5;
+        if(attackAbilities == Abilities.HUSTLE)      attackValue *= 1.5;
+        if(attackAbilities == Abilities.SOLAR_POWER) attackValue *= 1.5;
+        if(attackAbilities == Abilities.FLOWER_GIFT) attackValue *= 1.5;
+        if(attackAbilities == Abilities.PLUS)        attackValue *= 1.5;
+        if(attackAbilities == Abilities.MINUS)       attackValue *= 1.5; 
     }
     
     protected void makeLevelValue() {
@@ -463,9 +470,11 @@ public class DamageCalculator {
     
     protected int[] SubstituteDamageWithoutCritical = new int[16];
     protected int[] SubstituteDamageWithCritical    = new int[16];
-    
-    protected Abilities abilities;
-    protected Items items;
+
+    protected Abilities attackAbilities;
+    protected Items attackItems;
+    protected Abilities defenseAbilities;
+    protected Items defenseItems;
     /** ポケモンの状態 */
     protected Condition condition;
 
@@ -501,11 +510,11 @@ public class DamageCalculator {
 
     protected static final double[] CRITICAL_PROBABILITY = 
         {
-            0.0,           // rank=-1  0 
-            0.08333333333, // rank= 0  1/12 
-            0.16666666666, // rank= 1  1/6
-            0.5,           // rank= 2  1/2
-            1              // rank= 3  1/1
+            0.0,           /* rank=-1  0     */
+            0.08333333333, /* rank= 0  1/12  */
+            0.16666666666, /* rank= 1  1/6   */
+            0.5,           /* rank= 2  1/2   */
+            1              /* rank= 3  1/1   */
         
         };
     
@@ -537,38 +546,6 @@ public class DamageCalculator {
     
     /** タイプ相性 */
     protected double typeCompatibility;
-
-    /**
-     * abilitiesを取得します
-     * @return abilities
-     */
-    public Abilities getAbilities() {
-        return this.abilities;
-    }
-
-    /**
-     * abilitiesを設定します
-     * @param abilities
-     */
-    public void setAbilities(Abilities abilities) {
-        this.abilities = abilities;
-    }
-
-    /**
-     * itemsを取得します
-     * @return items
-     */
-    public Items getItems() {
-        return this.items;
-    }
-
-    /**
-     * itemsを設定します
-     * @param items
-     */
-    public void setItems(Items items) {
-        this.items = items;
-    }
 
     /**
      * conditionを取得します
