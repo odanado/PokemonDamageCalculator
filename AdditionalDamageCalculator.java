@@ -109,6 +109,7 @@ public class AdditionalDamageCalculator extends DamageCalculator implements Seri
         
         prevAdditionalMode[1] = prevAdditionalMode[0];
         prevAdditionalMode[0] = additionalMode;
+        updateResultHitPointsProbabilityList();
     }
     
     private void _addCalculate() {
@@ -249,8 +250,9 @@ public class AdditionalDamageCalculator extends DamageCalculator implements Seri
         initArray(damageProbabilityList0);
         initArray(damageProbabilityList1);
         
-        for (int i = 0; i < MAX_HP; i++) {
-            int a = constant < i ? i - constant : 0;
+        for (int i = 0; i < MAX_DAMAGE; i++) {
+            int a = i - constant < 0 ? 0 : i - constant;
+            a = MAX_HP <= i ? i : a;
             for (int j = 0; j < MAX_HP / 4 + 1; j++) {
                 damageProbabilityList0[a][j] += oldDamageProbabilityList0[i][j];
                 damageProbabilityList1[a][j] += oldDamageProbabilityList1[i][j];
@@ -259,6 +261,7 @@ public class AdditionalDamageCalculator extends DamageCalculator implements Seri
         }
         
         updateResultDamageProbabilityList();
+        updateResultHitPointsProbabilityList();
     }
     
     /**
@@ -294,6 +297,7 @@ public class AdditionalDamageCalculator extends DamageCalculator implements Seri
         }
         
         updateResultDamageProbabilityList();
+        updateResultHitPointsProbabilityList();
     }
 
     /**
@@ -347,6 +351,24 @@ public class AdditionalDamageCalculator extends DamageCalculator implements Seri
                 resultDamageProbabilityList1[i][j] += damageProbabilityList1[i][j] * d;
             }
         }
+    }
+    
+    /**
+     * HP のリスト更新
+     */
+    private void updateResultHitPointsProbabilityList() {
+        initArray(resultHitPointsProbabilityList0);
+        initArray(resultHitPointsProbabilityList1);
+
+        for (int i = 0; i < MAX_DAMAGE; i++) {
+            int a = MAX_HP - i < 0 ? 0 : MAX_HP - i;
+            for (int j = 0; j < MAX_HP / 4 + 1; j++) {
+
+                resultHitPointsProbabilityList0[a][j] += resultDamageProbabilityList0[i][j];
+                resultHitPointsProbabilityList1[a][j] += resultDamageProbabilityList1[i][j];
+            }
+        }
+
     }
     
     /**
@@ -452,6 +474,9 @@ public class AdditionalDamageCalculator extends DamageCalculator implements Seri
     /** 計算結果 */ 
     public double[][] resultDamageProbabilityList0    = new double[MAX_DAMAGE][MAX_DAMAGE / 4 + 1];
     public double[][] resultDamageProbabilityList1    = new double[MAX_DAMAGE][MAX_DAMAGE / 4 + 1];
+
+    public double[][] resultHitPointsProbabilityList0 = new double[MAX_DAMAGE][MAX_DAMAGE / 4 + 1];
+    public double[][] resultHitPointsProbabilityList1 = new double[MAX_DAMAGE][MAX_DAMAGE / 4 + 1];
 
     private AdditionalMode[] prevAdditionalMode = new AdditionalMode[2];
     
